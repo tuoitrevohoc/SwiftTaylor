@@ -15,10 +15,10 @@ class HTTPHandler: ChannelInboundHandler {
     public typealias InboundIn = HTTPServerRequestPart
     public typealias OutboundOut = HTTPServerResponsePart
     
-    private var request = HTTPRequest()
-    private var handler: ((HTTPRequest, HTTPResponse) -> Void)
+    private var request = Request()
+    private var handler: ((Request, Response) -> Void)
     
-    init(handler: @escaping (HTTPRequest, HTTPResponse) -> Void) {
+    init(handler: @escaping (Request, Response) -> Void) {
         self.handler = handler
     }
     
@@ -32,6 +32,7 @@ class HTTPHandler: ChannelInboundHandler {
         
         switch requestPart {
         case .head(let requestData):
+            request.method = requestData.method
             request.headers = requestData.headers
             request.path = requestData.uri
             request.version = requestData.version
@@ -42,7 +43,7 @@ class HTTPHandler: ChannelInboundHandler {
                 request.body = data
             }
         case .end:
-            let response = HTTPResponse(version: request.version, handler: self, context: ctx)
+            let response = Response(version: request.version, handler: self, context: ctx)
             handler(request, response)
         }
     }

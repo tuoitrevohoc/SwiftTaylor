@@ -9,12 +9,16 @@ import Foundation
 import NIO
 import NIOHTTP1
 
-public struct HTTPResponse {
-    public let version: HTTPVersion
+public typealias ResponseStatus = HTTPResponseStatus
+
+/// The response
+public struct Response {
+    
+    public let version: Version
     let handler: HTTPHandler
     let context: ChannelHandlerContext
     
-    func send(status: HTTPResponseStatus, data: Data) {
+    public func send(status: ResponseStatus, content data: Data) {
         let responseHead = HTTPResponseHead(version: version, status: status)
         context.writeAndFlush(handler.wrapOutboundOut(.head(responseHead)), promise: nil)
         
@@ -25,10 +29,16 @@ public struct HTTPResponse {
     }
 }
 
-public extension HTTPResponse {
-    func send(status: HTTPResponseStatus, content: String) {
+public extension Response {
+    
+    /// Send a response as text and status
+    ///
+    /// - Parameters:
+    ///   - status: the status
+    ///   - content: the content
+    func send(status: ResponseStatus, content: String) {
         if let data = content.data(using: .utf8) {
-            send(status: status, data: data)
+            send(status: status, content: data)
         }
     }
 }

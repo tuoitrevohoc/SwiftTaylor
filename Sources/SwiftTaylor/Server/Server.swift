@@ -12,13 +12,15 @@ import NIOHTTP1
 /// A Webserver
 public class Server {
     
-    /// port to listen on
-    let port: Int
+    public typealias Next = () -> Void
+    public typealias MiddleWare = (Request, Response, Next) -> Void
+    fileprivate typealias Handler = (Request, Response) -> Void
     
-    typealias Next = () -> Void
+    /// port to listen on
+    public let port: Int
     
     /// The handler
-    var handler: ((HTTPRequest, HTTPResponse) -> Void)?
+    fileprivate var handler: Handler = Server.defaultHandler
     
     /// Create a server with a port
     ///
@@ -27,12 +29,22 @@ public class Server {
         self.port = port
     }
     
-    public func use(handler: @escaping (HTTPRequest, HTTPResponse) -> Void) {
-        self.handler = handler
+    public func use(handler: @escaping MiddleWare) {
+        let oldHandler = self.handler
+        
+        self.handler = { request, response in
+            handler(request, response, {
+                oldHandler(request, response)
+            })
+        }
     }
     
-    func requestHandler(request: HTTPRequest, response: HTTPResponse) {
-        handler?(request, response)
+    func requestHandler(request: Request, response: Response) {
+        handler(request, response)
+    }
+    
+    fileprivate static func defaultHandler(request: Request, response: Response) {
+        response.send(status: .notFound, content: "Not Found")
     }
     
     /// start listening
