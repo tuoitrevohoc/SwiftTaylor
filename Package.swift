@@ -27,6 +27,11 @@ let package = Package(
             dependencies: [
                 "NIO",
                 "NIOHTTP1"
+            ]),
+        .testTarget(
+            name: "SwiftTaylorTests",
+            dependencies: [
+                "SwiftTaylor"
             ]
         )
     ]
