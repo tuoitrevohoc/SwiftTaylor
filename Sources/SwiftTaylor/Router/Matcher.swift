@@ -7,13 +7,18 @@
 
 import Foundation
 
+/// The route data
 public struct RouteData {
+    
+    /// The route
     public var route: String
+    
+    /// parameters
     public var parameters: [String: String]
 }
 
 /// The route matcher
-public protocol RouteMatcher {
+public protocol Matcher {
     
     /// Router matcher
     ///

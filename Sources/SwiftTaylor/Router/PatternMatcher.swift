@@ -7,11 +7,23 @@
 
 import Foundation
 
-public struct PatternRouteMatcher: RouteMatcher {
+/// Simple pattern matcher
+public struct PatternMatcher: Matcher {
     
+    /// The method
     let method: Method
+    
+    /// the pattern
     let pattern: String
     
+    /// the slash
+    static let backSlash: Character = "/"
+    
+    /// Construct a pattern route matcher using a method and pattern
+    ///
+    /// - Parameters:
+    ///   - method: the http request method
+    ///   - pattern: the pattern
     public init(method: Method, pattern: String) {
         self.method = method
         self.pattern = pattern
@@ -51,7 +63,6 @@ public struct PatternRouteMatcher: RouteMatcher {
             
             switch patternCharacter {
             case ":":
-                
                 let nextPatternIndex = nextComponent(in: pattern,
                                                      fromIndex: patternIndex,
                                                      until: patternEndIndex)
@@ -92,7 +103,7 @@ public struct PatternRouteMatcher: RouteMatcher {
                                    until endIndex: String.Index) -> String.Index {
         var nextIndex = index
         
-        while nextIndex < endIndex && string[nextIndex] != "/" {
+        while nextIndex < endIndex && string[nextIndex] != PatternMatcher.backSlash {
             nextIndex = string.index(after: nextIndex)
         }
         
