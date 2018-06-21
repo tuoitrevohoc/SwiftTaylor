@@ -42,8 +42,20 @@ public extension Response {
     /// - Parameters:
     ///   - status: the status
     ///   - content: the content
-    func send(status: ResponseStatus, content: String) {
+    public func send(status: ResponseStatus, content: String) {
         if let data = content.data(using: .utf8) {
+            send(status: status, content: data)
+        }
+    }
+    
+    /// Send an encodable object
+    ///
+    /// - Parameters:
+    ///   - status: the status
+    ///   - content: the content
+    public func send<ResponseData: Encodable>(status: ResponseStatus, content: ResponseData) {
+        let encoder = JSONEncoder()
+        if let data = try? encoder.encode(content) {
             send(status: status, content: data)
         }
     }

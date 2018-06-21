@@ -9,11 +9,13 @@ import Foundation
 
 /// The router handler
 public struct RouteHandler {
+    
+    /// The matcher
     let matcher: Matcher
+    
+    /// The handler
     let handler: Handler
 }
-
-fileprivate let ParameterKey = "parameters"
 
 /// The simple router
 public struct Router {
@@ -56,28 +58,19 @@ public struct Router {
     }
 }
 
-// MARK: - Extension on the server that adapt the router
-extension Server {
-    
-    /// Use the router as a middleware
-    ///
-    /// - Parameter router: the router
-    public func use(router: Router) {
-        use(handler: router.handle)
-    }
-}
-
-// MARK: - Add parameters to the request
-extension Request {
-    
-    /// get parameters
-    public var parameters: [String: String] {
-        return data[ParameterKey] as? [String: String] ?? [:]
-    }
-}
-
 // MARK: - extension
-extension Router {
+public extension Router {
+    
+    /// Add a route matcher
+    ///
+    /// - Parameters:
+    ///   - method: the method
+    ///   - pattern: the pattern
+    ///   - handler: the handler
+    public mutating func add(method: Method, pattern: String, handler: @escaping Handler) {
+        add(route: RouteHandler(matcher: PatternMatcher(method: method, pattern: pattern),
+                                handler: handler))
+    }
     
     /// add a new get route handler
     ///
@@ -85,10 +78,7 @@ extension Router {
     ///   - route: the route
     ///   - handler: the handler
     public mutating func get(_ pattern: String, handler: @escaping Handler) {
-        add(route:
-            RouteHandler(matcher: PatternMatcher(method: .GET, pattern: pattern),
-                         handler: handler)
-        )
+        add(method: .GET, pattern: pattern, handler: handler)
     }
     
     /// add a new post route handler
@@ -97,10 +87,7 @@ extension Router {
     ///   - route: the route
     ///   - handler: the handler
     public mutating func post(_ pattern: String, handler: @escaping Handler) {
-        add(route:
-            RouteHandler(matcher: PatternMatcher(method: .POST, pattern: pattern),
-                         handler: handler)
-        )
+        add(method: .PUT, pattern: pattern, handler: handler)
     }
     
     /// add a new put route handler
@@ -109,10 +96,7 @@ extension Router {
     ///   - route: the route
     ///   - handler: the handler
     public mutating func put(_ pattern: String, handler: @escaping Handler) {
-        add(route:
-            RouteHandler(matcher: PatternMatcher(method: .PUT, pattern: pattern),
-                         handler: handler)
-        )
+        add(method: .PUT, pattern: pattern, handler: handler)
     }
     
     /// add a new patch route handler
@@ -121,10 +105,7 @@ extension Router {
     ///   - route: the route
     ///   - handler: the handler
     public mutating func patch(_ pattern: String, handler: @escaping Handler) {
-        add(route:
-            RouteHandler(matcher: PatternMatcher(method: .PATCH, pattern: pattern),
-                         handler: handler)
-        )
+        add(method: .PATCH, pattern: pattern, handler: handler)
     }
     
     /// add a new delete route handler
@@ -133,9 +114,6 @@ extension Router {
     ///   - route: the route
     ///   - handler: the handler
     public mutating func delete(_ pattern: String, handler: @escaping Handler) {
-        add(route:
-            RouteHandler(matcher: PatternMatcher(method: .DELETE, pattern: pattern),
-                         handler: handler)
-        )
+        add(method: .DELETE, pattern: pattern, handler: handler)
     }
 }
