@@ -4,7 +4,7 @@ A lightweight Swift on the server that uses `swift-nio` and latest Swift feature
 
 Sample hello world:
 
-```
+```swift
 import SwiftTaylor
 
 let server = Server(port: 8080)
@@ -18,7 +18,7 @@ try! server.listen()
 
 With a router:
 
-```
+```swift
 import SwiftTaylor
 
 let server = Server(port: 8080)
