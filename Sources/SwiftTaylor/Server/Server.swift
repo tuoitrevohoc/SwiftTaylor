@@ -9,12 +9,12 @@ import Foundation
 import NIO
 import NIOHTTP1
 
+public typealias Next = () -> Void
+public typealias MiddleWare = (Request, Response, Next) -> Void
+public typealias Handler = (Request, Response) -> Void
+
 /// A Webserver
 public class Server {
-    
-    public typealias Next = () -> Void
-    public typealias MiddleWare = (Request, Response, Next) -> Void
-    fileprivate typealias Handler = (Request, Response) -> Void
     
     /// port to listen on
     public let port: Int

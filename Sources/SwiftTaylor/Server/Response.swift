@@ -12,11 +12,17 @@ import NIOHTTP1
 public typealias ResponseStatus = HTTPResponseStatus
 
 /// The response
-public struct Response {
+public class Response {
     
     public let version: Version
     let handler: HTTPHandler
     let context: ChannelHandlerContext
+    
+    init(version: Version, handler: HTTPHandler, context: ChannelHandlerContext) {
+        self.version = version
+        self.handler = handler
+        self.context = context
+    }
     
     public func send(status: ResponseStatus, content data: Data) {
         let responseHead = HTTPResponseHead(version: version, status: status)
