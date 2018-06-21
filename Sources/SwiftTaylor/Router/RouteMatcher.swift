@@ -8,8 +8,8 @@
 import Foundation
 
 public struct RouteData {
-    public var path: String
-    public var parameters: [String: Any]
+    public var route: String
+    public var parameters: [String: String]
 }
 
 /// The route matcher
@@ -19,5 +19,5 @@ public protocol RouteMatcher {
     ///
     /// - Parameter route: the route to check
     /// - Returns: true if route is matching
-    func match(method: Method, route: String) -> RouteData?
+    func match(method: Method, path: String) -> RouteData?
 }

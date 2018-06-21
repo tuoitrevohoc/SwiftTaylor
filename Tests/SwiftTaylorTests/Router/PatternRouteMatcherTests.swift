@@ -12,55 +12,55 @@ class PatternRouteMatcherTests: XCTestCase {
     
     func testMatch_ExactRoute() {
         let matcher = PatternRouteMatcher(method: Method.GET, pattern: "/path")
-        let result = matcher.match(method: Method.GET, route: "/path")
+        let result = matcher.match(method: Method.GET, path: "/path")
         XCTAssertNotNil(result)
-        XCTAssertEqual("/path", result?.path)
+        XCTAssertEqual("/path", result?.route)
         XCTAssertEqual(0, result?.parameters.count)
     }
     
     func testMatch_Pattern() {
         let matcher = PatternRouteMatcher(method: Method.GET, pattern: "/path/:id")
-        let result = matcher.match(method: Method.GET, route: "/path/12")
+        let result = matcher.match(method: Method.GET, path: "/path/12")
         XCTAssertNotNil(result)
-        XCTAssertEqual("/path/:id", result?.path)
+        XCTAssertEqual("/path/:id", result?.route)
         XCTAssertEqual(1, result?.parameters.count)
-        XCTAssertEqual("12", result?.parameters["id"] as? String)
+        XCTAssertEqual("12", result?.parameters["id"])
     }
     
     func testMatch_Pattern_withExtra() {
         let matcher = PatternRouteMatcher(method: Method.GET, pattern: "/path/:id/concepts")
-        let result = matcher.match(method: Method.GET, route: "/path/12/concepts")
+        let result = matcher.match(method: Method.GET, path: "/path/12/concepts")
         XCTAssertNotNil(result)
-        XCTAssertEqual("/path/:id/concepts", result?.path)
+        XCTAssertEqual("/path/:id/concepts", result?.route)
         XCTAssertEqual(1, result?.parameters.count)
-        XCTAssertEqual("12", result?.parameters["id"] as? String)
+        XCTAssertEqual("12", result?.parameters["id"])
     }
     
     func testMatch_Pattern_withTwoParameters() {
         let matcher = PatternRouteMatcher(method: Method.GET, pattern: "/path/:id/:items")
-        let result = matcher.match(method: Method.GET, route: "/path/12/concepts")
+        let result = matcher.match(method: Method.GET, path: "/path/12/concepts")
         XCTAssertNotNil(result)
-        XCTAssertEqual("/path/:id/concepts", result?.path)
+        XCTAssertEqual("/path/:id/:items", result?.route)
         XCTAssertEqual(2, result?.parameters.count)
-        XCTAssertEqual("12", result?.parameters["id"] as? String)
-        XCTAssertEqual("concepts", result?.parameters["items"] as? String)
+        XCTAssertEqual("12", result?.parameters["id"])
+        XCTAssertEqual("concepts", result?.parameters["items"])
     }
     
     func testNotMatch() {
         let matcher = PatternRouteMatcher(method: Method.GET, pattern: "/path")
-        let result = matcher.match(method: Method.GET, route: "/otherpath")
+        let result = matcher.match(method: Method.GET, path: "/otherpath")
         XCTAssertNil(result)
     }
 
     func testNotMatchExtended() {
         let matcher = PatternRouteMatcher(method: Method.GET, pattern: "/path")
-        let result = matcher.match(method: Method.GET, route: "/paths")
+        let result = matcher.match(method: Method.GET, path: "/paths")
         XCTAssertNil(result)
     }
     
     func testNotMatchExtended2() {
         let matcher = PatternRouteMatcher(method: Method.GET, pattern: "/path")
-        let result = matcher.match(method: Method.GET, route: "/path/subpath")
+        let result = matcher.match(method: Method.GET, path: "/path/subpath")
         XCTAssertNil(result)
     }
 
