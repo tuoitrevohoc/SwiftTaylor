@@ -32,5 +32,6 @@ router.get("/:name") { request, response in
     response.send("Hello \(request.parameters["name"]!)")
 }
 
+server.use(router: router)
 try! server.listen()
 ```
