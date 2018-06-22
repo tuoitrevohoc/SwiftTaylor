@@ -23,3 +23,5 @@ router.get("/:name") { request, response in
 
 server.use(router: router)
 try server.listen()
+
+print("Server started")

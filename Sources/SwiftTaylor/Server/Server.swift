@@ -68,7 +68,7 @@ public class Server {
             try! group.syncShutdownGracefully()
         }
         
-        let channel = try bootstrap.bind(host: "::1", port: port).wait()
+        let channel = try bootstrap.bind(host: "0.0.0.0", port: port).wait()
         
         guard let localAddress = channel.localAddress else {
             fatalError("Address is in used")

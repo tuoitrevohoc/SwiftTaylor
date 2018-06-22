@@ -63,5 +63,16 @@ class PatternMatcherTests: XCTestCase {
         let result = matcher.match(method: Method.GET, path: "/path/subpath")
         XCTAssertNil(result)
     }
+    
+    static let allTests = [
+        ("testMatch_ExactRoute", testMatch_ExactRoute),
+        ("testMatch_Pattern", testMatch_Pattern),
+        ("testMatch_Pattern_withExtra", testMatch_Pattern_withExtra),
+        ("testMatch_Pattern_withTwoParameters", testMatch_Pattern_withTwoParameters),
+        ("testMatch_Pattern", testMatch_Pattern),
+        ("testNotMatch", testNotMatch),
+        ("testNotMatchExtended", testNotMatchExtended),
+        ("testNotMatchExtended2", testNotMatchExtended2),   
+    ]
 
 }
